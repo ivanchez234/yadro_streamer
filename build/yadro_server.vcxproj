@@ -86,7 +86,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+<<<<<<< HEAD
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -104,16 +108,28 @@
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
+<<<<<<< HEAD
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;ASIO_STANDALONE;_WEBSOCKETPP_CPP11_STL_;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+=======
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
+<<<<<<< HEAD
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;ASIO_STANDALONE;_WEBSOCKETPP_CPP11_STL_;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -121,7 +137,11 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
+<<<<<<< HEAD
       <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;gstapp-1.0.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+=======
+      <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <AdditionalLibraryDirectories>C:/msvc_x86_64/lib;C:/msvc_x86_64/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
@@ -140,7 +160,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+<<<<<<< HEAD
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -157,18 +181,30 @@
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
+<<<<<<< HEAD
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;ASIO_STANDALONE;_WEBSOCKETPP_CPP11_STL_;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+=======
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
+<<<<<<< HEAD
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;ASIO_STANDALONE;_WEBSOCKETPP_CPP11_STL_;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -176,7 +212,11 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
+<<<<<<< HEAD
       <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;gstapp-1.0.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+=======
+      <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <AdditionalLibraryDirectories>C:/msvc_x86_64/lib;C:/msvc_x86_64/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
@@ -195,7 +235,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
+<<<<<<< HEAD
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -212,18 +256,30 @@
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
+<<<<<<< HEAD
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;ASIO_STANDALONE;_WEBSOCKETPP_CPP11_STL_;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+=======
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
+<<<<<<< HEAD
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;ASIO_STANDALONE;_WEBSOCKETPP_CPP11_STL_;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -231,7 +287,11 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
+<<<<<<< HEAD
       <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;gstapp-1.0.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+=======
+      <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <AdditionalLibraryDirectories>C:/msvc_x86_64/lib;C:/msvc_x86_64/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
@@ -250,7 +310,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
+<<<<<<< HEAD
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -268,16 +332,28 @@
       <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
+<<<<<<< HEAD
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;ASIO_STANDALONE;_WEBSOCKETPP_CPP11_STL_;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+=======
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
     </ClCompile>
     <ResourceCompile>
+<<<<<<< HEAD
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;ASIO_STANDALONE;_WEBSOCKETPP_CPP11_STL_;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
       <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;C:\code\yadro_streamer\src\asio\asio\include;C:\code\yadro_streamer\src\asio\include;C:\code\yadro_streamer\src\websocketpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+=======
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\msvc_x86_64\include\gstreamer-1.0;C:\msvc_x86_64\include\glib-2.0;C:\msvc_x86_64\lib\glib-2.0\include;C:\code\yadro_streamer\src\libfvad\include;C:\code\yadro_streamer\src\libfvad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -285,7 +361,11 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
+<<<<<<< HEAD
       <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;gstapp-1.0.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+=======
+      <AdditionalDependencies>gstreamer-1.0.lib;gobject-2.0.lib;glib-2.0.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+>>>>>>> 51b09f83cc4c50a9a9ac7bbfa518eeb4269da1e0
       <AdditionalLibraryDirectories>C:/msvc_x86_64/lib;C:/msvc_x86_64/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>

@@ -49,6 +49,7 @@ target_link_libraries(gstyadrovad
     glib-2.0
 )
 
+<<<<<<< HEAD
 
 # ==========================================
 # ЧАСТЬ 2: СБОРКА СЕРВЕРА (yadro_server.exe)
