@@ -35,3 +35,10 @@ target_link_libraries(gstyadrovad
     gobject-2.0 
     glib-2.0
 )
+
+# --- СБОРКА СЕРВЕРА ---
+# Создаем исполняемый файл из server.cpp
+add_executable(yadro_server src/server.cpp)
+
+# Подключаем к серверу библиотеки GStreamer
+target_link_libraries(yadro_server gstreamer-1.0 gobject-2.0 glib-2.0)

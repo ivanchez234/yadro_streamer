@@ -1,3 +1,4 @@
 C:/code/yadro_streamer/build/CMakeFiles/gstyadrovad.dir
+C:/code/yadro_streamer/build/CMakeFiles/yadro_server.dir
 C:/code/yadro_streamer/build/CMakeFiles/ALL_BUILD.dir
 C:/code/yadro_streamer/build/CMakeFiles/ZERO_CHECK.dir
