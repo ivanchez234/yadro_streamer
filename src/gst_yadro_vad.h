@@ -11,7 +11,6 @@ extern "C" {
 
 G_BEGIN_DECLS
 
-// Перечисления состояний нашего автомата
 typedef enum {
     VAD_STATE_SILENCE,
     VAD_STATE_SPEECH,
@@ -25,13 +24,17 @@ struct _GstYadroVad {
     GstBaseTransform element;
     GstAdapter *adapter;
     Fvad *vad_inst;
-    GstClockTime next_pts; 
     
-    // ПЕРЕМЕННЫЕ ЭТАПА 4
+    /* Этап 4: Конечный автомат */
     GstYadroVadState state;
     int hangover_time_left_ms;
+
+    /* Этап 5: Магия времени */
+    GstClockTime original_time;      // Идеальное время оригинального файла
+    GstClockTime total_dropped_time; // Сколько времени мы уже удалили
+    gboolean need_discont;           // Нужно ли поставить флаг склейки
 };
 
 G_END_DECLS
 
-#endif
+#endif /* __GST_YADRO_VAD_H__ */

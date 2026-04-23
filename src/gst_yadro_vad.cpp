@@ -5,7 +5,7 @@ GST_DEBUG_CATEGORY_STATIC (gst_yadro_vad_debug);
 
 #define VAD_CAPS "audio/x-raw, format=S16LE, rate=16000, channels=1"
 #define CHUNK_SIZE_BYTES 960
-#define HANGOVER_DURATION_MS 210 // Около 7 чанков по 30мс
+#define HANGOVER_DURATION_MS 210
 
 static GstStaticPadTemplate sink_template = GST_STATIC_PAD_TEMPLATE("sink", GST_PAD_SINK, GST_PAD_ALWAYS, GST_STATIC_CAPS(VAD_CAPS));
 static GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE("src", GST_PAD_SRC, GST_PAD_ALWAYS, GST_STATIC_CAPS(VAD_CAPS));
@@ -19,30 +19,27 @@ static gboolean gst_yadro_vad_start(GstBaseTransform *trans) {
     fvad_set_mode(filter->vad_inst, 3);
     fvad_set_sample_rate(filter->vad_inst, 16000);
     
-    filter->next_pts = 0; 
-    filter->state = VAD_STATE_SILENCE; // Начинаем с тишины
+    filter->state = VAD_STATE_SILENCE;
     filter->hangover_time_left_ms = 0;
     
-    GST_INFO_OBJECT(filter, "YADRO VAD Stage 4 Started. Init state: SILENCE");
+    // Инициализируем наши часы (Этап 5)
+    filter->original_time = 0;
+    filter->total_dropped_time = 0;
+    filter->need_discont = FALSE;
+    
+    GST_INFO_OBJECT(filter, "YADRO VAD Stage 5 Started. Time Magic Enabled.");
     return TRUE;
 }
 
 static gboolean gst_yadro_vad_stop(GstBaseTransform *trans) {
     GstYadroVad *filter = GST_YADRO_VAD(trans);
-    if (filter->adapter) {
-        g_object_unref(filter->adapter);
-        filter->adapter = NULL;
-    }
-    if (filter->vad_inst) {
-        fvad_free(filter->vad_inst);
-        filter->vad_inst = NULL;
-    }
+    if (filter->adapter) g_object_unref(filter->adapter);
+    if (filter->vad_inst) fvad_free(filter->vad_inst);
     return TRUE;
 }
 
 static GstFlowReturn gst_yadro_vad_submit_input_buffer(GstBaseTransform *trans, gboolean is_discont, GstBuffer *input) {
     GstYadroVad *filter = GST_YADRO_VAD(trans);
-    // Убрали очистку адаптера, теперь MP3 не будет обрываться
     gst_adapter_push(filter->adapter, input);
     return GST_FLOW_OK;
 }
@@ -63,32 +60,50 @@ static GstFlowReturn gst_yadro_vad_generate_output(GstBaseTransform *trans, GstB
     int is_speech = fvad_process(filter->vad_inst, (const int16_t *)map.data, map.size / 2);
     gst_buffer_unmap(temp_buf, &map);
 
-    // --- ЛОГИКА КОНЕЧНОГО АВТОМАТА ---
+    // Запоминаем прошлое состояние, чтобы поймать момент перехода
+    GstYadroVadState old_state = filter->state;
+
+    /* --- ЛОГИКА КОНЕЧНОГО АВТОМАТА --- */
     if (is_speech == 1) {
         filter->state = VAD_STATE_SPEECH;
         filter->hangover_time_left_ms = HANGOVER_DURATION_MS;
     } else {
         if (filter->state == VAD_STATE_SPEECH || filter->state == VAD_STATE_HANGOVER) {
             filter->state = VAD_STATE_HANGOVER;
-            filter->hangover_time_left_ms -= 30; // Отнимаем время одного чанка
-            
+            filter->hangover_time_left_ms -= 30;
             if (filter->hangover_time_left_ms <= 0) {
                 filter->state = VAD_STATE_SILENCE;
             }
         }
     }
 
-    // --- РЕШЕНИЕ: ОТПРАВЛЯТЬ ИЛИ УДАЛЯТЬ ---
+    /* --- ОТСЛЕЖИВАНИЕ СКЛЕЙКИ --- */
+    // Если мы вышли из тишины в речь — нам нужно поставить флаг разрыва на этот буфер
+    if (old_state == VAD_STATE_SILENCE && filter->state == VAD_STATE_SPEECH) {
+        filter->need_discont = TRUE;
+        GST_DEBUG_OBJECT(filter, "Transition to SPEECH. Setting DISCONT flag.");
+    }
+
+    /* --- МАГИЯ ВРЕМЕНИ И УДАЛЕНИЕ --- */
     if (filter->state == VAD_STATE_SILENCE) {
-        GST_DEBUG_OBJECT(filter, "Dropping silence buffer");
-        gst_buffer_unref(temp_buf); // Удаляем буфер из памяти
-        *outbuf = NULL;             // Ничего не отдаем дальше
-    } else {
-        // Восстанавливаем время для тех буферов, которые выжили
-        GST_BUFFER_PTS(temp_buf) = filter->next_pts;
-        GST_BUFFER_DURATION(temp_buf) = 30 * GST_MSECOND;
-        filter->next_pts += 30 * GST_MSECOND;
+        // Увеличиваем счетчики, но выкидываем буфер
+        filter->total_dropped_time += 30 * GST_MSECOND;
+        filter->original_time += 30 * GST_MSECOND;
         
+        gst_buffer_unref(temp_buf);
+        *outbuf = NULL;
+    } else {
+        // Главная формула: PTS = оригинальный PTS - удаленное время
+        GST_BUFFER_PTS(temp_buf) = filter->original_time - filter->total_dropped_time;
+        GST_BUFFER_DURATION(temp_buf) = 30 * GST_MSECOND;
+        
+        // Ставим флаг, если это первый кусок после тишины
+        if (filter->need_discont) {
+            GST_BUFFER_FLAG_SET(temp_buf, GST_BUFFER_FLAG_DISCONT);
+            filter->need_discont = FALSE; // Сбрасываем до следующей паузы
+        }
+
+        filter->original_time += 30 * GST_MSECOND;
         *outbuf = temp_buf;
     }
 
@@ -103,7 +118,7 @@ static void gst_yadro_vad_class_init(GstYadroVadClass *klass) {
     gst_element_class_add_static_pad_template(element_class, &sink_template);
     gst_element_class_set_static_metadata(element_class,
         "YADRO VAD Filter", "Filter/Effect/Audio",
-        "Removes silence from audio stream", "Developer");
+        "Removes silence (Stage 5: Time Magic & Discont)", "Developer");
 
     trans_class->start = GST_DEBUG_FUNCPTR(gst_yadro_vad_start);
     trans_class->stop = GST_DEBUG_FUNCPTR(gst_yadro_vad_stop);
