@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/code/yadro_streamer/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
