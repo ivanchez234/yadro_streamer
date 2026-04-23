@@ -178,6 +178,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{33823ED7-0611-3B85-BB80-CEE52695DBB2}</Project>
       <Name>gstyadrovad</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\code\yadro_streamer\build\yadro_server.vcxproj">
+      <Project>{C019AF1F-EF84-3A69-8CA5-4992A46C9833}</Project>
+      <Name>yadro_server</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

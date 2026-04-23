@@ -1,6 +1,6 @@
 ^C:\CODE\YADRO_STREAMER\BUILD\CMAKEFILES\735C3FD14F3F9D95B5248FB054A037A2\GENERATE.STAMP.RULE
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/code/yadro_streamer -BC:/code/yadro_streamer/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/code/yadro_streamer/build/YadroVadPlugin.sln
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/code/yadro_streamer -BC:/code/yadro_streamer/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/code/yadro_streamer/build/YadroStreamer.sln
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
