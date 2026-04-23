@@ -4,6 +4,42 @@
     <ClCompile Include="C:\code\yadro_streamer\src\gst_yadro_vad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\fvad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\signal_processing\division_operations.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\signal_processing\energy.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\signal_processing\get_scaling_square.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\signal_processing\resample_48khz.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\signal_processing\resample_by_2_internal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\signal_processing\resample_fractional.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\signal_processing\spl_inl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\vad\vad_core.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\vad\vad_filterbank.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\vad\vad_gmm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\code\yadro_streamer\src\libfvad\src\vad\vad_sp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="C:\code\yadro_streamer\CMakeLists.txt" />

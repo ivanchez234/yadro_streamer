@@ -4,68 +4,81 @@ GST_DEBUG_CATEGORY_STATIC (gst_yadro_vad_debug);
 #define GST_CAT_DEFAULT gst_yadro_vad_debug
 
 #define VAD_CAPS "audio/x-raw, format=S16LE, rate=16000, channels=1"
-#define CHUNK_SIZE_BYTES 960 // Ровно 30 мс аудио
+#define CHUNK_SIZE_BYTES 960
 
-static GstStaticPadTemplate sink_template = GST_STATIC_PAD_TEMPLATE("sink",
-    GST_PAD_SINK, GST_PAD_ALWAYS, GST_STATIC_CAPS(VAD_CAPS)
-);
-
-static GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE("src",
-    GST_PAD_SRC, GST_PAD_ALWAYS, GST_STATIC_CAPS(VAD_CAPS)
-);
+static GstStaticPadTemplate sink_template = GST_STATIC_PAD_TEMPLATE("sink", GST_PAD_SINK, GST_PAD_ALWAYS, GST_STATIC_CAPS(VAD_CAPS));
+static GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE("src", GST_PAD_SRC, GST_PAD_ALWAYS, GST_STATIC_CAPS(VAD_CAPS));
 
 G_DEFINE_TYPE (GstYadroVad, gst_yadro_vad, GST_TYPE_BASE_TRANSFORM);
 
-/* Вызывается при запуске пайплайна (создаем адаптер) */
 static gboolean gst_yadro_vad_start(GstBaseTransform *trans) {
     GstYadroVad *filter = GST_YADRO_VAD(trans);
     filter->adapter = gst_adapter_new();
-    GST_INFO_OBJECT(filter, "YADRO VAD filter started. Adapter created.");
+    filter->vad_inst = fvad_new();
+    fvad_set_mode(filter->vad_inst, 3);
+    fvad_set_sample_rate(filter->vad_inst, 16000);
+    
+    // Инициализируем счетчик
+    filter->next_pts = 0; 
+    
+    GST_INFO_OBJECT(filter, "YADRO VAD filter started. VAD Mode: 3");
     return TRUE;
 }
 
-/* Вызывается при остановке (чистим память) */
 static gboolean gst_yadro_vad_stop(GstBaseTransform *trans) {
     GstYadroVad *filter = GST_YADRO_VAD(trans);
     if (filter->adapter) {
         g_object_unref(filter->adapter);
         filter->adapter = NULL;
     }
+    if (filter->vad_inst) {
+        fvad_free(filter->vad_inst);
+        filter->vad_inst = NULL;
+    }
     return TRUE;
 }
 
-/* ШАГ 1: Принимаем случайные куски аудио и складываем в адаптер */
 static GstFlowReturn gst_yadro_vad_submit_input_buffer(GstBaseTransform *trans, gboolean is_discont, GstBuffer *input) {
     GstYadroVad *filter = GST_YADRO_VAD(trans);
-    
-    // Если произошел разрыв потока (перемотка), чистим старые данные
-    if (is_discont) {
-        gst_adapter_clear(filter->adapter);
-    }
-    
-    // Пушим буфер в накопитель. GStreamer сам освободит память input.
+    // Убрали очистку адаптера, теперь MP3 не будет обрываться
     gst_adapter_push(filter->adapter, input);
-    
     return GST_FLOW_OK;
 }
 
-/* ШАГ 2: Формируем исходящие данные строгими блоками */
 static GstFlowReturn gst_yadro_vad_generate_output(GstBaseTransform *trans, GstBuffer **outbuf) {
     GstYadroVad *filter = GST_YADRO_VAD(trans);
     gsize available = gst_adapter_available(filter->adapter);
 
-    // Если накопилось меньше 30 мс (960 байт), говорим пайплайну: "Ждем еще"
     if (available < CHUNK_SIZE_BYTES) {
         *outbuf = NULL; 
         return GST_FLOW_OK;
     }
 
-    // Берем только количество байт, кратное 960 (чтобы не отрезать куски фрейма)
-    gsize bytes_to_take = (available / CHUNK_SIZE_BYTES) * CHUNK_SIZE_BYTES;
-    
-    // Достаем этот ровный кусок и отдаем дальше
-    *outbuf = gst_adapter_take_buffer(filter->adapter, bytes_to_take);
+    GstBuffer *temp_buf = gst_adapter_take_buffer(filter->adapter, CHUNK_SIZE_BYTES);
 
+    GstMapInfo map;
+    gst_buffer_map(temp_buf, &map, GST_MAP_READ);
+
+    const int16_t *samples = (const int16_t *)map.data;
+    size_t num_samples = map.size / 2;
+
+    int is_speech = fvad_process(filter->vad_inst, samples, num_samples);
+
+    // Убрали эмодзи для стабильности консоли
+    if (is_speech == 1) {
+        GST_INFO_OBJECT(filter, "[VAD] SPEECH");
+    } else if (is_speech == 0) {
+        GST_INFO_OBJECT(filter, "[VAD] SILENCE");
+    }
+
+    gst_buffer_unmap(temp_buf, &map);
+    
+    // МАГИЯ ВРЕМЕНИ: Восстанавливаем метки времени для плеера!
+    GST_BUFFER_PTS(temp_buf) = filter->next_pts;
+    GST_BUFFER_DURATION(temp_buf) = 30 * GST_MSECOND; // 30 миллисекунд
+    filter->next_pts += 30 * GST_MSECOND;
+
+    *outbuf = temp_buf; 
     return GST_FLOW_OK;
 }
 
@@ -75,12 +88,10 @@ static void gst_yadro_vad_class_init(GstYadroVadClass *klass) {
 
     gst_element_class_add_static_pad_template(element_class, &src_template);
     gst_element_class_add_static_pad_template(element_class, &sink_template);
-    
     gst_element_class_set_static_metadata(element_class,
         "YADRO VAD Filter", "Filter/Effect/Audio",
-        "Removes silence from audio stream (Stage 2: Chunk Resizing)", "Developer");
+        "Removes silence from audio stream", "Developer");
 
-    // Привязываем наши новые функции
     trans_class->start = GST_DEBUG_FUNCPTR(gst_yadro_vad_start);
     trans_class->stop = GST_DEBUG_FUNCPTR(gst_yadro_vad_stop);
     trans_class->submit_input_buffer = GST_DEBUG_FUNCPTR(gst_yadro_vad_submit_input_buffer);

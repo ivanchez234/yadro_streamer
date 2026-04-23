@@ -1,1 +1,13 @@
 C:\code\yadro_streamer\src\gst_yadro_vad.cpp;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\gst_yadro_vad.obj
+C:\code\yadro_streamer\src\libfvad\src\fvad.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\fvad.obj
+C:\code\yadro_streamer\src\libfvad\src\signal_processing\division_operations.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\division_operations.obj
+C:\code\yadro_streamer\src\libfvad\src\signal_processing\energy.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\energy.obj
+C:\code\yadro_streamer\src\libfvad\src\signal_processing\get_scaling_square.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\get_scaling_square.obj
+C:\code\yadro_streamer\src\libfvad\src\signal_processing\resample_48khz.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\resample_48khz.obj
+C:\code\yadro_streamer\src\libfvad\src\signal_processing\resample_by_2_internal.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\resample_by_2_internal.obj
+C:\code\yadro_streamer\src\libfvad\src\signal_processing\resample_fractional.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\resample_fractional.obj
+C:\code\yadro_streamer\src\libfvad\src\signal_processing\spl_inl.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\spl_inl.obj
+C:\code\yadro_streamer\src\libfvad\src\vad\vad_core.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\vad_core.obj
+C:\code\yadro_streamer\src\libfvad\src\vad\vad_filterbank.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\vad_filterbank.obj
+C:\code\yadro_streamer\src\libfvad\src\vad\vad_gmm.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\vad_gmm.obj
+C:\code\yadro_streamer\src\libfvad\src\vad\vad_sp.c;C:\code\yadro_streamer\build\gstyadrovad.dir\Debug\vad_sp.obj
