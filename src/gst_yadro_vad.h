@@ -11,6 +11,13 @@ extern "C" {
 
 G_BEGIN_DECLS
 
+// Перечисления состояний нашего автомата
+typedef enum {
+    VAD_STATE_SILENCE,
+    VAD_STATE_SPEECH,
+    VAD_STATE_HANGOVER
+} GstYadroVadState;
+
 #define GST_TYPE_YADRO_VAD (gst_yadro_vad_get_type())
 G_DECLARE_FINAL_TYPE(GstYadroVad, gst_yadro_vad, GST, YADRO_VAD, GstBaseTransform)
 
@@ -18,11 +25,13 @@ struct _GstYadroVad {
     GstBaseTransform element;
     GstAdapter *adapter;
     Fvad *vad_inst;
-    
-    // ДОБАВИЛИ: Счетчик времени для плеера
     GstClockTime next_pts; 
+    
+    // ПЕРЕМЕННЫЕ ЭТАПА 4
+    GstYadroVadState state;
+    int hangover_time_left_ms;
 };
 
 G_END_DECLS
 
-#endif /* __GST_YADRO_VAD_H__ */
+#endif

@@ -5,6 +5,7 @@ GST_DEBUG_CATEGORY_STATIC (gst_yadro_vad_debug);
 
 #define VAD_CAPS "audio/x-raw, format=S16LE, rate=16000, channels=1"
 #define CHUNK_SIZE_BYTES 960
+#define HANGOVER_DURATION_MS 210 // Около 7 чанков по 30мс
 
 static GstStaticPadTemplate sink_template = GST_STATIC_PAD_TEMPLATE("sink", GST_PAD_SINK, GST_PAD_ALWAYS, GST_STATIC_CAPS(VAD_CAPS));
 static GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE("src", GST_PAD_SRC, GST_PAD_ALWAYS, GST_STATIC_CAPS(VAD_CAPS));
@@ -18,10 +19,11 @@ static gboolean gst_yadro_vad_start(GstBaseTransform *trans) {
     fvad_set_mode(filter->vad_inst, 3);
     fvad_set_sample_rate(filter->vad_inst, 16000);
     
-    // Инициализируем счетчик
     filter->next_pts = 0; 
+    filter->state = VAD_STATE_SILENCE; // Начинаем с тишины
+    filter->hangover_time_left_ms = 0;
     
-    GST_INFO_OBJECT(filter, "YADRO VAD filter started. VAD Mode: 3");
+    GST_INFO_OBJECT(filter, "YADRO VAD Stage 4 Started. Init state: SILENCE");
     return TRUE;
 }
 
@@ -55,30 +57,41 @@ static GstFlowReturn gst_yadro_vad_generate_output(GstBaseTransform *trans, GstB
     }
 
     GstBuffer *temp_buf = gst_adapter_take_buffer(filter->adapter, CHUNK_SIZE_BYTES);
-
     GstMapInfo map;
     gst_buffer_map(temp_buf, &map, GST_MAP_READ);
 
-    const int16_t *samples = (const int16_t *)map.data;
-    size_t num_samples = map.size / 2;
+    int is_speech = fvad_process(filter->vad_inst, (const int16_t *)map.data, map.size / 2);
+    gst_buffer_unmap(temp_buf, &map);
 
-    int is_speech = fvad_process(filter->vad_inst, samples, num_samples);
-
-    // Убрали эмодзи для стабильности консоли
+    // --- ЛОГИКА КОНЕЧНОГО АВТОМАТА ---
     if (is_speech == 1) {
-        GST_INFO_OBJECT(filter, "[VAD] SPEECH");
-    } else if (is_speech == 0) {
-        GST_INFO_OBJECT(filter, "[VAD] SILENCE");
+        filter->state = VAD_STATE_SPEECH;
+        filter->hangover_time_left_ms = HANGOVER_DURATION_MS;
+    } else {
+        if (filter->state == VAD_STATE_SPEECH || filter->state == VAD_STATE_HANGOVER) {
+            filter->state = VAD_STATE_HANGOVER;
+            filter->hangover_time_left_ms -= 30; // Отнимаем время одного чанка
+            
+            if (filter->hangover_time_left_ms <= 0) {
+                filter->state = VAD_STATE_SILENCE;
+            }
+        }
     }
 
-    gst_buffer_unmap(temp_buf, &map);
-    
-    // МАГИЯ ВРЕМЕНИ: Восстанавливаем метки времени для плеера!
-    GST_BUFFER_PTS(temp_buf) = filter->next_pts;
-    GST_BUFFER_DURATION(temp_buf) = 30 * GST_MSECOND; // 30 миллисекунд
-    filter->next_pts += 30 * GST_MSECOND;
+    // --- РЕШЕНИЕ: ОТПРАВЛЯТЬ ИЛИ УДАЛЯТЬ ---
+    if (filter->state == VAD_STATE_SILENCE) {
+        GST_DEBUG_OBJECT(filter, "Dropping silence buffer");
+        gst_buffer_unref(temp_buf); // Удаляем буфер из памяти
+        *outbuf = NULL;             // Ничего не отдаем дальше
+    } else {
+        // Восстанавливаем время для тех буферов, которые выжили
+        GST_BUFFER_PTS(temp_buf) = filter->next_pts;
+        GST_BUFFER_DURATION(temp_buf) = 30 * GST_MSECOND;
+        filter->next_pts += 30 * GST_MSECOND;
+        
+        *outbuf = temp_buf;
+    }
 
-    *outbuf = temp_buf; 
     return GST_FLOW_OK;
 }
 
