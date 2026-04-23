@@ -25,14 +25,16 @@ struct _GstYadroVad {
     GstAdapter *adapter;
     Fvad *vad_inst;
     
-    /* Этап 4: Конечный автомат */
     GstYadroVadState state;
     int hangover_time_left_ms;
 
-    /* Этап 5: Магия времени */
-    GstClockTime original_time;      // Идеальное время оригинального файла
-    GstClockTime total_dropped_time; // Сколько времени мы уже удалили
-    gboolean need_discont;           // Нужно ли поставить флаг склейки
+    GstClockTime original_time;
+    GstClockTime total_dropped_time;
+    gboolean need_discont;
+
+    /* --- НОВЫЕ ПЕРЕМЕННЫЕ ДЛЯ НАСТРОЕК --- */
+    gint vad_mode;
+    gint hangover_duration_ms;
 };
 
 G_END_DECLS
