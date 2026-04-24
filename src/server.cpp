@@ -7,6 +7,7 @@
 #include <gst/app/gstappsink.h>
 #include <iostream>
 #include <stdlib.h>
+#include <string> // Добавлено для работы с std::string
 #include <thread>
 #include <mutex>
 #include <set>
@@ -79,7 +80,8 @@ static GstFlowReturn on_new_sample(GstElement *sink, gpointer user_data) {
                 for (auto it : connections) {
                     echo_server.send(it, map.data, map.size, websocketpp::frame::opcode::binary);
                 }
-                std::cout << "[СЕРВЕР] Разослано " << map.size << " байт аудио " << connections.size() << " клиентам." << std::endl;
+                // Закомментируй следующую строку, если логи отправки байтов мешают читать консоль
+                // std::cout << "[СЕРВЕР] Разослано " << map.size << " байт аудио " << connections.size() << " клиентам." << std::endl;
             }
         }
 
@@ -99,26 +101,58 @@ int main(int argc, char *argv[]) {
     // Подсказываем GStreamer'у, где искать нашу скомпилированную DLL (плагин)
     _putenv_s("GST_PLUGIN_PATH", "C:\\code\\yadro_streamer\\build\\Debug");
 
+    // ПРОВЕРКА АРГУМЕНТОВ КОМАНДНОЙ СТРОКИ
+    if (argc < 3) {
+        std::cout << "❌ Ошибка: Недостаточно параметров при запуске!" << std::endl;
+        std::cout << "Использование: yadro_server.exe <путь_к_файлу> <ускорение>" << std::endl;
+        std::cout << "Пример: yadro_server.exe C:/code/yadro_streamer/test3.mp3 1.5" << std::endl;
+        
+        // Пауза, чтобы окно не закрылось мгновенно при двойном клике
+        std::cout << "\nНажмите Enter для выхода..." << std::endl;
+        std::cin.get();
+        return -1;
+    }
+
+    // Сохраняем аргументы в переменные
+    std::string filePath = argv[1];
+    std::string tempo = argv[2];
+
     // Запускаем сеть в ФОНОВОМ потоке, чтобы она не мешала GStreamer
     std::thread ws_thread(run_websocket_server);
 
     gst_init(&argc, &argv);
-    std::cout << "==== YADRO STREAMING SERVER: WEBSOCKET MODE ====" << std::endl;
+    std::cout << "==== YADRO STREAMING SERVER: VAD + PITCH ====" << std::endl;
+    std::cout << "📁 Обрабатываемый файл: " << filePath << std::endl;
+    std::cout << "⚡ Коэффициент ускорения: x" << tempo << std::endl;
 
-    // Сборка пайплайна (Обрати внимание на sync=true в appsink)
-    const char* pipeline_str = 
-        "filesrc location=\"C:/code/yadro_streamer/test3.mp3\" ! "
+    // Динамическая сборка пайплайна с подстановкой переменных
+    std::string pipeline_str = 
+        "filesrc location=\"" + filePath + "\" ! "
         "decodebin ! audioconvert ! audioresample ! "
+        // Твой VAD плагин
         "yadrovad vad-mode=3 hangover-time=200 ! "
-        "audioconvert ! appsink name=mysink emit-signals=true sync=true";
+        // Конвертируем для pitch
+        "audioconvert ! audioresample ! "
+        "pitch tempo=" + tempo + " ! "
+        // Конвертируем обратно и ставим ЖЕСТКИЙ ФИЛЬТР для сети
+        "audioconvert ! audioresample ! "
+        "audio/x-raw,format=S16LE,rate=16000,channels=1 ! " // <--- ВОТ СПАСИТЕЛЬНАЯ СТРОКА
+        "appsink name=mysink emit-signals=true sync=true";
 
     GError *error = nullptr;
-    GstElement *pipeline = gst_parse_launch(pipeline_str, &error);
+    GstElement *pipeline = gst_parse_launch(pipeline_str.c_str(), &error);
 
     if (error) {
         std::cerr << "❌ Ошибка парсинга пайплайна: " << error->message << std::endl;
         g_clear_error(&error);
-        exit(-1);
+        
+        // Красиво останавливаем сеть перед выходом, чтобы не было ошибки 995
+        echo_server.stop();
+        ws_thread.join(); 
+        
+        std::cout << "\nНажмите Enter для выхода..." << std::endl;
+        std::cin.get();
+        return -1;
     }
 
     // Подключаем перехватчик (нашу функцию on_new_sample) к элементу appsink
